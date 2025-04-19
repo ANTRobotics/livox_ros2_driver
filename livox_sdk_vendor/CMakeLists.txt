@@ -6,6 +6,7 @@ find_package(ament_cmake REQUIRED)
 
 macro(build_livox_sdk)
   set(livox_sdk_REV "v2.3.1")
+  set(livox_sdk_BRANCH "jazzy")
   set(extra_cmake_args)
 
   get_property(multi_config GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
@@ -14,9 +15,9 @@ macro(build_livox_sdk)
   endif()
 
   include(ExternalProject)
-  externalproject_add(livox-sdk-${livox_sdk_REV}
-    GIT_REPOSITORY https://github.com/Livox-SDK/Livox-SDK.git
-    GIT_TAG ${livox_sdk_REV}
+  externalproject_add(livox-sdk-${livox_sdk_BRANCH}
+    GIT_REPOSITORY https://github.com/ANTRobotics/Livox-SDK.git # https://github.com/Livox-SDK/Livox-SDK.git
+    GIT_TAG ${livox_sdk_BRANCH}
     GIT_SHALLOW OFF
     TIMEOUT 60
     CMAKE_ARGS
