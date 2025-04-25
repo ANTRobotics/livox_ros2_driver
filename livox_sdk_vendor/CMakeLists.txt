@@ -6,7 +6,7 @@ find_package(ament_cmake REQUIRED)
 
 macro(build_livox_sdk)
   set(livox_sdk_REV "v2.3.1")
-  set(livox_sdk_BRANCH "jazzy") #506c885c1a4502fd0d3517b8a9857f7d3673a175
+  set(livox_sdk_BRANCH "foxy")
   set(extra_cmake_args)
 
   get_property(multi_config GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
