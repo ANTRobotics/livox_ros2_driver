@@ -175,9 +175,12 @@ uint32_t Lddc::PublishPointcloud2(LidarDataQueue *queue, uint32_t packet_num,
         is_zero_packet = 1;
       }
     }
-    /** Use the first packet timestamp as pointcloud2 msg timestamp */
+    /** Stamp the cloud with the host ROS clock instead of the LiDAR's
+     *  internal (since-boot) timebase, so it lines up with the other sensors
+     *  (GPS, odometry) that use the system/wall clock. The device `timestamp`
+     *  is still used below for packet-gap detection. */
     if (!published_packet) {
-      cloud.header.stamp = rclcpp::Time(timestamp);
+      cloud.header.stamp = cur_node_->now();
     }
     uint32_t single_point_num = storage_packet.point_num * echo_num;
 
@@ -481,8 +484,9 @@ uint32_t Lddc::PublishImuData(LidarDataQueue *queue, uint32_t packet_num,
       reinterpret_cast<LivoxEthPacket *>(storage_packet.raw_data);
   timestamp = GetStoragePacketTimestamp(&storage_packet, data_source);
   if (timestamp) {
-    imu_data.header.stamp =
-        rclcpp::Time(timestamp);  // to ros time stamp
+    // Host ROS clock instead of the LiDAR's internal timebase, to match the
+    // point cloud and the other sensors on the system/wall clock.
+    imu_data.header.stamp = cur_node_->now();
   }
 
   uint8_t point_buf[2048];
